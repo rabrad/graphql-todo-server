@@ -1,5 +1,6 @@
 import {Resolver, Query, Arg, Mutation} from 'type-graphql'
 import {Todo} from '../models/Todo'
+import {MutationResponse} from '../models/Response/MutationResponse'
 import {CreateTodoInput} from '../inputs/CreateTodoInput'
 import {UpdateTodoInput} from '../inputs/UpdateTodoInput'
 
@@ -15,27 +16,37 @@ export class TodoResolver {
     return Todo.findOne({where: {id}})
   }
 
-  @Mutation(() => Todo)
-  async createTodo(@Arg('data') data: CreateTodoInput): Promise<Todo> {
+  @Mutation(() => MutationResponse)
+  async createTodo(@Arg('data') data: CreateTodoInput): Promise<MutationResponse> {
     const todo = Todo.create(data)
     await todo.save()
-    return todo
+    return {affectedRows: 1, success: true, todo}
   }
 
-  @Mutation(() => Todo)
-  async updateTodo(@Arg('id') id: string, @Arg('data') data: UpdateTodoInput): Promise<Todo> {
+  @Mutation(() => MutationResponse)
+  async updateTodo(
+    @Arg('id') id: string,
+    @Arg('data') data: UpdateTodoInput,
+  ): Promise<MutationResponse> {
     const todo = await Todo.findOne({where: {id}})
     if (!todo) throw new Error('Todo not found!')
     Object.assign(todo, data)
-    await todo.save()
-    return todo
+    const updatedTodo = await todo.save()
+    return {affectedRows: 1, success: true, todo: updatedTodo}
   }
 
-  @Mutation(() => Boolean)
-  async deleteTodo(@Arg('id') id: string): Promise<boolean> {
+  @Mutation(() => MutationResponse)
+  async deleteTodo(@Arg('id') id: string): Promise<MutationResponse> {
     const todo = await Todo.findOne({where: {id}})
     if (!todo) throw new Error('Todo not found!')
     await todo.remove()
-    return true
+    return {affectedRows: 1, success: true}
+  }
+
+  @Mutation(() => MutationResponse)
+  async deleteAllTodos(): Promise<MutationResponse> {
+    const todoCount = await Todo.count()
+    const deleteResult = await Todo.delete({})
+    return {affectedRows: deleteResult.affected || todoCount, success: true}
   }
 }
