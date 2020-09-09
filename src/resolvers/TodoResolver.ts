@@ -3,6 +3,7 @@ import {Todo} from '../models/Todo'
 import {MutationResponse} from '../models/Response/MutationResponse'
 import {CreateTodoInput} from '../inputs/CreateTodoInput'
 import {UpdateTodoInput} from '../inputs/UpdateTodoInput'
+import {StatisticsResponse} from '../models/Response/StatisticsResponse'
 
 @Resolver()
 export class TodoResolver {
@@ -14,6 +15,20 @@ export class TodoResolver {
   @Query(() => Todo)
   todo(@Arg('id') id: string): Promise<Todo | undefined> {
     return Todo.findOne({where: {id}})
+  }
+
+  @Query(() => StatisticsResponse)
+  async statistics(): Promise<StatisticsResponse> {
+    const todos = await Todo.find()
+    const openTodos = todos.filter(todo => !todo.isDone)
+    const completedTodos = todos.filter(todo => todo.isDone)
+    return {
+      openTodoStatistics: {
+        count: openTodos.length,
+        todos: openTodos,
+      },
+      completedTodoStatistics: {count: completedTodos.length, todos: completedTodos},
+    }
   }
 
   @Mutation(() => MutationResponse)
