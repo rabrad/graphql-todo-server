@@ -1,7 +1,6 @@
 import {Resolver, Query, Arg, Mutation} from 'type-graphql'
 import {LoginResponse} from '../models/Response/LoginResponse'
 import {User} from '../models/User'
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import {SignUpResponse} from '../models/Response/SingUpResponse'
 import {createTokenForUser} from '../utils/tokenUtils'
@@ -21,7 +20,7 @@ export class UserResolver {
     if (!passwordMatches) {
       throw new Error('Passwords do not match!')
     }
-    const token = jwt.sign({email: user.email, id: user.id}, 'secret')
+    const token = createTokenForUser(user)
     return {token}
   }
 

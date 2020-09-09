@@ -17,5 +17,5 @@ export const isAuthenticated: MiddlewareFn<IUserContext> = async ({context}, nex
   } catch (error) {
     throw new Error('Your session is expired, please login again.')
   }
-  next()
+  return next()
 }
