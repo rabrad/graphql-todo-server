@@ -1,22 +1,26 @@
-import {Resolver, Query, Arg, Mutation} from 'type-graphql'
+import {Resolver, Query, Arg, Mutation, UseMiddleware} from 'type-graphql'
 import {Todo} from '../models/Todo'
 import {MutationResponse} from '../models/Response/MutationResponse'
 import {CreateTodoInput} from '../inputs/CreateTodoInput'
 import {UpdateTodoInput} from '../inputs/UpdateTodoInput'
 import {StatisticsResponse} from '../models/Response/StatisticsResponse'
+import {isAuthenticated} from '../middlewares/isAuthenticated'
 
 @Resolver()
 export class TodoResolver {
+  @UseMiddleware(isAuthenticated)
   @Query(() => [Todo])
   todos(): Promise<Todo[]> {
     return Todo.find()
   }
 
+  @UseMiddleware(isAuthenticated)
   @Query(() => Todo)
   todo(@Arg('id') id: string): Promise<Todo | undefined> {
     return Todo.findOne({where: {id}})
   }
 
+  @UseMiddleware(isAuthenticated)
   @Query(() => StatisticsResponse)
   async statistics(): Promise<StatisticsResponse> {
     const todos = await Todo.find()
@@ -31,6 +35,7 @@ export class TodoResolver {
     }
   }
 
+  @UseMiddleware(isAuthenticated)
   @Mutation(() => MutationResponse)
   async createTodo(@Arg('data') data: CreateTodoInput): Promise<MutationResponse> {
     const todo = Todo.create(data)
@@ -38,6 +43,7 @@ export class TodoResolver {
     return {affectedRows: 1, success: true, todo}
   }
 
+  @UseMiddleware(isAuthenticated)
   @Mutation(() => MutationResponse)
   async updateTodo(
     @Arg('id') id: string,
@@ -50,6 +56,7 @@ export class TodoResolver {
     return {affectedRows: 1, success: true, todo: updatedTodo}
   }
 
+  @UseMiddleware(isAuthenticated)
   @Mutation(() => MutationResponse)
   async deleteTodo(@Arg('id') id: string): Promise<MutationResponse> {
     const todo = await Todo.findOne({where: {id}})
@@ -58,6 +65,7 @@ export class TodoResolver {
     return {affectedRows: 1, success: true}
   }
 
+  @UseMiddleware(isAuthenticated)
   @Mutation(() => MutationResponse)
   async deleteAllTodos(): Promise<MutationResponse> {
     const todoCount = await Todo.count()
