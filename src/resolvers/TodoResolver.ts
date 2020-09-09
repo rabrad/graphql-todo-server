@@ -7,7 +7,6 @@ import {StatisticsResponse} from '../models/Response/StatisticsResponse'
 import {AppErrors, Errors} from '../custom-errors/AppErrors'
 import {isAuthenticated} from '../middlewares/isAuthenticated'
 
-
 @Resolver()
 export class TodoResolver {
   @UseMiddleware(isAuthenticated)
@@ -19,7 +18,7 @@ export class TodoResolver {
   @UseMiddleware(isAuthenticated)
   @Query(() => Todo)
   todo(@Arg('id') id: string): Promise<Todo | undefined> {
-    return Todo.findOne({ where: { id } })
+    return Todo.findOne({where: {id}})
   }
 
   @UseMiddleware(isAuthenticated)
@@ -41,7 +40,6 @@ export class TodoResolver {
     await todo.save()
     return {affectedRows: 1, success: true, todo}
   }
-
 
   @UseMiddleware(isAuthenticated)
   @Mutation(() => MutationResponse)

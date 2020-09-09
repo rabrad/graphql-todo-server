@@ -1,7 +1,7 @@
 export const Errors = {
   TodoNotFound: {
     status: 404,
-    message: 'Todo not found!.',
+    message: 'Todo not found.',
   },
 
   Unauthorized: {
@@ -9,9 +9,14 @@ export const Errors = {
     message: 'Authentication credentials not valid.',
   },
 
-  Forbidden: {
+  SessionExpired: {
     status: 403,
-    message: "You're missing permission to execute this request.",
+    message: 'Your session is expired, please login again.',
+  },
+
+  UserNotFound: {
+    status: 404,
+    message: 'User not found.',
   },
 }
 

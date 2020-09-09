@@ -4,6 +4,7 @@ import {User} from '../models/User'
 import bcrypt from 'bcryptjs'
 import {SignUpResponse} from '../models/Response/SingUpResponse'
 import {createTokenForUser} from '../utils/tokenUtils'
+import {AppErrors, Errors} from '../custom-errors/AppErrors'
 
 @Resolver()
 export class UserResolver {
@@ -14,11 +15,11 @@ export class UserResolver {
   ): Promise<LoginResponse> {
     const user = await User.findOne({where: {email}})
     if (!user) {
-      throw new Error('User not found with provided email.')
+      throw new AppErrors(Errors.UserNotFound)
     }
     const passwordMatches = await bcrypt.compare(password, user.password)
     if (!passwordMatches) {
-      throw new Error('Passwords do not match!')
+      throw new AppErrors(Errors.Unauthorized)
     }
     const token = createTokenForUser(user)
     return {token}
