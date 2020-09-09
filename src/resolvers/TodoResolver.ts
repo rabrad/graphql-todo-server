@@ -24,14 +24,11 @@ export class TodoResolver {
   @Query(() => StatisticsResponse)
   async statistics(): Promise<StatisticsResponse> {
     const todos = await Todo.find()
-    const openTodos = todos.filter(todo => !todo.isDone)
-    const completedTodos = todos.filter(todo => todo.isDone)
+    const open = todos.filter(todo => !todo.isDone).length
+    const completed = todos.filter(todo => todo.isDone).length
     return {
-      openTodoStatistics: {
-        count: openTodos.length,
-        todos: openTodos,
-      },
-      completedTodoStatistics: {count: completedTodos.length, todos: completedTodos},
+      open,
+      completed,
     }
   }
 

@@ -1,5 +1,5 @@
 import {ObjectType, Field} from 'type-graphql'
-import {User} from 'models/User'
+import {User} from '../User'
 import {LoginResponse} from './LoginResponse'
 
 @ObjectType()
