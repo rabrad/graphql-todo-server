@@ -12,5 +12,5 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
 
-  rules: {},
+  rules: { "prettier/prettier": 0 },
 }
