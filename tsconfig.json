@@ -2,19 +2,17 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "CommonJS",
-
+    "moduleResolution": "node",
     "baseUrl": "src",
     "rootDir": "src",
     "outDir": "dist",
-
     "strict": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

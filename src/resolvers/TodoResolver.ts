@@ -1,7 +1,7 @@
-import {Resolver, Query, Arg, Mutation} from 'type-graphql'
-import {Todo} from '../models/Todo'
-import {CreateTodoInput} from '../inputs/CreateTodoInput'
-import {UpdateTodoInput} from '../inputs/UpdateTodoInput'
+import { Resolver, Query, Arg, Mutation } from 'type-graphql'
+import { Todo } from '../models/Todo'
+import { CreateTodoInput } from '../inputs/CreateTodoInput'
+import { UpdateTodoInput } from '../inputs/UpdateTodoInput'
 
 @Resolver()
 export class TodoResolver {
@@ -12,7 +12,7 @@ export class TodoResolver {
 
   @Query(() => Todo)
   todo(@Arg('id') id: string): Promise<Todo | undefined> {
-    return Todo.findOne({where: {id}})
+    return Todo.findOne({ where: { id } })
   }
 
   @Mutation(() => Todo)
@@ -24,7 +24,7 @@ export class TodoResolver {
 
   @Mutation(() => Todo)
   async updateTodo(@Arg('id') id: string, @Arg('data') data: UpdateTodoInput): Promise<Todo> {
-    const todo = await Todo.findOne({where: {id}})
+    const todo = await Todo.findOne({ where: { id } })
     if (!todo) throw new Error('Todo not found!')
     Object.assign(todo, data)
     await todo.save()
@@ -33,7 +33,7 @@ export class TodoResolver {
 
   @Mutation(() => Boolean)
   async deleteTodo(@Arg('id') id: string): Promise<boolean> {
-    const todo = await Todo.findOne({where: {id}})
+    const todo = await Todo.findOne({ where: { id } })
     if (!todo) throw new Error('Todo not found!')
     await todo.remove()
     return true
