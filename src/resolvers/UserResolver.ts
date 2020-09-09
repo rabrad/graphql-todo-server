@@ -31,7 +31,7 @@ export class UserResolver {
     @Arg('password') password: string,
   ): Promise<SignUpResponse> {
     const passwordHash = await bcrypt.hash(password, 12)
-    const user = User.create({email, password: passwordHash})
+    const user = await User.create({email, password: passwordHash}).save()
     const token = createTokenForUser(user)
     return {token, user}
   }

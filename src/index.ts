@@ -8,6 +8,8 @@ import {buildSchema} from 'type-graphql'
 import {TodoResolver} from './resolvers/TodoResolver'
 import {UserResolver} from './resolvers/UserResolver'
 
+import {createMockUsers} from './mock/mockUsers'
+
 dotenv.config()
 
 async function bootstrap() {
@@ -19,6 +21,7 @@ async function bootstrap() {
 
   app.listen(4000, () => {
     console.log(`Server is running :)  - GraphQl playground available at: ${server.graphqlPath}`)
+    createMockUsers()
   })
 }
 
