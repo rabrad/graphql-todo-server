@@ -17,7 +17,7 @@ export class TodoResolver {
   @UseMiddleware(isAuthenticated)
   @Query(() => Todo)
   todo(@Arg('id') id: string): Promise<Todo | undefined> {
-    return Todo.findOne({where: {id}})
+    return Todo.findOne({ where: { id } })
   }
 
   @UseMiddleware(isAuthenticated)
@@ -39,6 +39,7 @@ export class TodoResolver {
     await todo.save()
     return {affectedRows: 1, success: true, todo}
   }
+
 
   @UseMiddleware(isAuthenticated)
   @Mutation(() => MutationResponse)
