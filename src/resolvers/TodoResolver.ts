@@ -4,7 +4,9 @@ import {MutationResponse} from '../models/Response/MutationResponse'
 import {CreateTodoInput} from '../inputs/CreateTodoInput'
 import {UpdateTodoInput} from '../inputs/UpdateTodoInput'
 import {StatisticsResponse} from '../models/Response/StatisticsResponse'
+import {AppErrors, Errors} from '../custom-errors/AppErrors'
 import {isAuthenticated} from '../middlewares/isAuthenticated'
+
 
 @Resolver()
 export class TodoResolver {
@@ -48,7 +50,7 @@ export class TodoResolver {
     @Arg('data') data: UpdateTodoInput,
   ): Promise<MutationResponse> {
     const todo = await Todo.findOne({where: {id}})
-    if (!todo) throw new Error('Todo not found!')
+    if (!todo) throw new AppErrors(Errors.TodoNotFound)
     Object.assign(todo, data)
     const updatedTodo = await todo.save()
     return {affectedRows: 1, success: true, todo: updatedTodo}
@@ -58,7 +60,7 @@ export class TodoResolver {
   @Mutation(() => MutationResponse)
   async deleteTodo(@Arg('id') id: string): Promise<MutationResponse> {
     const todo = await Todo.findOne({where: {id}})
-    if (!todo) throw new Error('Todo not found!')
+    if (!todo) throw new AppErrors(Errors.TodoNotFound)
     await todo.remove()
     return {affectedRows: 1, success: true}
   }
