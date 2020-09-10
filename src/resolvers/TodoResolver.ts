@@ -30,6 +30,7 @@ export class TodoResolver {
     return {
       open,
       completed,
+      all: todos.length,
     }
   }
 

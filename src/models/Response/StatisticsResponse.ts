@@ -7,4 +7,7 @@ export class StatisticsResponse {
 
   @Field(() => Int)
   completed: number
+
+  @Field(() => Int)
+  all: number
 }
